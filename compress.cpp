@@ -1,55 +1,12 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
-#include <vector>
-#include <queue>
-#include <cstring>
-#include <bitset>//for binary printing
-
-using namespace std;
-
-struct node {
-	char c;
-	unsigned int freq;
-	node* L;
-	node* R;
-};
-
-struct codeContainer {
-
-	int code[126];
-	char ch;
-	int len;
-};
-
-struct Comparator {
-	bool operator()(const node* x, const node* y) {
-		return x->freq > +y->freq;
-	}
-};
-
-int freqTable[255] = { 0 };
-priority_queue < node*, vector<node*>, Comparator> pq;
-codeContainer* container;
-string fileData; //entire content of file
-int numCodes;
-
-void setFreq();
-node* createNode(int, int);
-node* createNode(node*, node*);
-node* createTree();
-void generateCode(node*, int);
-void processCompression(int, ofstream&);
-void writeCompressedMessage(unsigned int, ofstream&);
-void compressionStat();
+#include "Header.h"
 
 void compress() {
 	ofstream outFile;
-	outFile.open("C:\\Users\\geeky\\MEGA\\Workspace\\Visual Studio 2019\\Huffman_Coding\\output.bin", ios::binary | ios::out | ios::trunc);
+	outFile.open(outFileName, ios::binary | ios::out | ios::trunc);
 
 	
 	setFreq(); //builds frequency table
+	writeFreqTable(outFile);
 	node* master = createTree(); //builds the binary tree + sets the value of numCodes
 	container = (codeContainer*)malloc(numCodes * sizeof(codeContainer));
 	generateCode(master, 0);
@@ -61,7 +18,7 @@ void compress() {
 
 void setFreq() {
 	ifstream inFile;
-	inFile.open("C:\\Users\\geeky\\MEGA\\Workspace\\Visual Studio 2019\\Huffman_Coding\\input.txt");
+	inFile.open(inFileName);
 	int amt = 0;
 	stringstream buffer;
 	buffer << inFile.rdbuf();
@@ -148,8 +105,13 @@ void generateCode(node * master, int level) {
 	return;
 }
 
+void writeFreqTable(ofstream& outFile) {
+	for (int i = 0; i < 255; i++) {
+		writeCompressedMessage((unsigned int)freqTable[i], outFile);
+	}
+}
+
 void processCompression(int amt, ofstream& outFile) {
-	
 	int field = 0, bitCount = 0, byteCount = 0, numBits = 0;
 	unsigned int payload = 0;
 
@@ -177,7 +139,6 @@ void processCompression(int amt, ofstream& outFile) {
 			}
 		}
 	}
-
 	if (field != 0) {
 		while (bitCount != 8) {
 			field = (field << 1) + 1;
@@ -197,7 +158,6 @@ void processCompression(int amt, ofstream& outFile) {
 			writeCompressedMessage(payload, outFile);
 		}
 	}
-
 	else if (payload != 0) {
 		for (int i = 0; i < (4 - byteCount); i++)
 			payload = (payload << 8);
@@ -212,25 +172,20 @@ void processCompression(int amt, ofstream& outFile) {
 }
 
 void writeCompressedMessage(unsigned int data, ofstream& outFile) {
-	//std::string binary = std::bitset<32>(data).to_string(); //to binary
-	//std::cout << binary << " ";
-	//cout << data << "d" << endl;
-	
 	outFile.write(reinterpret_cast <const char*> (&data), sizeof(data));
-	
 }
 
 void compressionStat() {
 	ifstream inFile;
-	inFile.open("C:\\Users\\geeky\\MEGA\\Workspace\\Visual Studio 2019\\Huffman_Coding\\input.txt");
+	inFile.open(inFileName);
 	inFile.seekg(0, ios::end);
-	unsigned long int in = inFile.tellg();
+	long unsigned int in = (long unsigned int)inFile.tellg();
 	cout << "Initial File Size: " << in << " bytes" << endl << endl;
 	inFile.close();
-	inFile.open("C:\\Users\\geeky\\MEGA\\Workspace\\Visual Studio 2019\\Huffman_Coding\\output.bin");
+	inFile.open(outFileName);
 	inFile.seekg(0, ios::end);
-	unsigned long int out = inFile.tellg();
+	long unsigned int out = (long unsigned int)inFile.tellg();
 	cout << "Compressed File Size: " << out << " bytes" << endl << endl;
-	cout << "Compression Ratio: " << (double)(100 * out) / in << "%" << endl << endl;
+	cout << "Compression Ratio: " << (double)(((double)out/(double)in) *(double)100) << "%" << endl << endl;
 	inFile.close();
 }
