@@ -1,0 +1,6 @@
+﻿  compress.cpp
+C:\Users\geeky\MEGA\Workspace\Visual Studio 2019\Huffman_Coding\compress.cpp(227): warning C4244: 'initializing': conversion from 'std::streamoff' to 'unsigned long', possible loss of data
+C:\Users\geeky\MEGA\Workspace\Visual Studio 2019\Huffman_Coding\compress.cpp(232): warning C4244: 'initializing': conversion from 'std::streamoff' to 'unsigned long', possible loss of data
+  driver.cpp
+  Generating Code...
+  Huffman_Coding.vcxproj -> C:\Users\geeky\MEGA\Workspace\Visual Studio 2019\Huffman_Coding\x64\Debug\Huffman_Coding.exe
