@@ -3,4 +3,3 @@ Huffman Coding is a algorithm for loss-less data compression. The algorithm work
 
 This algorithm is implemented using a priority queue.
 # Huffman_Coding
-# Huffman_Coding
