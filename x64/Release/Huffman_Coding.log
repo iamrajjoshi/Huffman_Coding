@@ -1,0 +1,9 @@
+﻿  huffman.cpp
+C:\Users\geeky\MEGA\Workspace\Visual Studio 2019\Huffman_Coding\huffman.cpp(37,30): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  main.cpp
+C:\Users\geeky\MEGA\Workspace\Visual Studio 2019\Huffman_Coding\huffman.cpp(132,26): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 338 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  Huffman_Coding.vcxproj -> C:\Users\geeky\MEGA\Workspace\Visual Studio 2019\Huffman_Coding\x64\Release\Huffman_Coding.exe
