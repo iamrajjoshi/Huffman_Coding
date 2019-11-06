@@ -4,19 +4,13 @@ using namespace std::chrono;
 
 int decode(string arg1, string arg2) {
 	Huffman h(arg1, arg2);
-	h.recreate_huffman_tree();
-	h.decoding_save();
-	cout << endl;
+	h.writeDecompress();
 	return 0;
 }
 
 int encode(string arg1, string arg2) {
 	Huffman h(arg1, arg2);
-	h.create_pq();
-	h.create_huffman_tree();
-	h.calculate_huffman_codes();
-	h.coding_save();
-	cout << endl;
+	h.writeCompress();
 	return 0;
 }
 
@@ -43,7 +37,7 @@ int main(int argc, char* argv[]) {
 			decode(inFileName, outFileName);
 			auto stop = high_resolution_clock::now();
 			auto duration = duration_cast<milliseconds>(stop - start);
-			cout << "Decompression Completed!" << endl;
+			cout << endl << "Decompression Completed!" << endl;
 			cout << "---------------------------------" << endl;
 			cout << "Execution Time: " << duration.count() << " milliseconds" << endl << endl;
 		}
