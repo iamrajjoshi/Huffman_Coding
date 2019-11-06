@@ -31,10 +31,10 @@ int main(int argc, char* argv[]) {
 			auto start = high_resolution_clock::now();
 			encode(inFileName, outFileName);
 			auto stop = high_resolution_clock::now();
-			auto duration = duration_cast<seconds>(stop - start);
+			auto duration = duration_cast<milliseconds>(stop - start);
 			cout << "Compression Completed!" << endl;
 			cout << "---------------------------------" << endl;
-			cout << "Execution Time: " << duration.count() << " seconds" << endl << endl;
+			cout << "Execution Time: " << duration.count() << " milliseconds" << endl << endl;
 		}
 		else if (arg == "-d") {
 			cout << "Starting Decompression..." << endl;
@@ -42,10 +42,10 @@ int main(int argc, char* argv[]) {
 			auto start = high_resolution_clock::now();
 			decode(inFileName, outFileName);
 			auto stop = high_resolution_clock::now();
-			auto duration = duration_cast<seconds>(stop - start);
+			auto duration = duration_cast<milliseconds>(stop - start);
 			cout << "Decompression Completed!" << endl;
 			cout << "---------------------------------" << endl;
-			cout << "Execution Time: " << duration.count() << " seconds" << endl << endl;
+			cout << "Execution Time: " << duration.count() << " milliseconds" << endl << endl;
 		}
 	}
 	else {
