@@ -2,16 +2,16 @@
 #include <chrono>
 using namespace std::chrono;
 
-int decode(string arg1, string arg2) {
+void decode(string arg1, string arg2) {
 	Huffman h(arg1, arg2);
 	h.writeDecompress();
-	return 0;
+	return;
 }
 
-int encode(string arg1, string arg2) {
+void encode(string arg1, string arg2) {
 	Huffman h(arg1, arg2);
 	h.writeCompress();
-	return 0;
+	return;
 }
 
 int main(int argc, char* argv[]) {
@@ -21,25 +21,23 @@ int main(int argc, char* argv[]) {
 		string outFileName = argv[3];
 		if (arg == "-e") {
 			cout << "Starting Compression..." << endl;
-			cout << "---------------------------------" << endl;
 			auto start = high_resolution_clock::now();
 			encode(inFileName, outFileName);
 			auto stop = high_resolution_clock::now();
-			auto duration = duration_cast<milliseconds>(stop - start);
+			auto dur = stop - start;
+			auto f_secs = std::chrono::duration_cast<std::chrono::duration<float>>(dur);
 			cout << "Compression Completed!" << endl;
-			cout << "---------------------------------" << endl;
-			cout << "Execution Time: " << duration.count() << " milliseconds" << endl << endl;
+			cout << "Execution Time: " << f_secs.count() << " seconds" << endl;
 		}
 		else if (arg == "-d") {
 			cout << "Starting Decompression..." << endl;
-			cout << "---------------------------------";
 			auto start = high_resolution_clock::now();
 			decode(inFileName, outFileName);
 			auto stop = high_resolution_clock::now();
-			auto duration = duration_cast<milliseconds>(stop - start);
-			cout << endl << "Decompression Completed!" << endl;
-			cout << "---------------------------------" << endl;
-			cout << "Execution Time: " << duration.count() << " milliseconds" << endl << endl;
+			auto dur = stop - start;
+			auto f_secs = std::chrono::duration_cast<std::chrono::duration<float>>(dur);
+			cout << "Decompression Completed!" << endl;
+			cout << "Execution Time: " << f_secs.count() << " seconds" << endl;
 		}
 	}
 	else {

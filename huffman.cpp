@@ -9,12 +9,12 @@ void Huffman::makeFQ() {
 	return;
 }
 
-void Huffman::setCode(huffman_node* node, string code) {
+void Huffman::makeCodes(huffman_node* node, string code) {
 	if (node->left == nullptr && node->right == nullptr)
 		node->code = code;
 	else {
-		setCode(node->left, code + '0');
-		setCode(node->right, code + '1');
+		makeCodes(node->left, code + '0');
+		makeCodes(node->right, code + '1');
 	}
 	return;
 }
@@ -39,7 +39,7 @@ string Huffman::decimalToBinary(int in) {
 	return result;
 }
 
-void Huffman::buildBranch(string& path, char a_code) {//build a new branch according to the input code and ignore the already existed branches
+void Huffman::makeBranch(string& path, char a_code) {
 	huffman_node* current = root;
 	for (int i = 0; i < path.size(); i++) {
 		if (path[i] == '0') {
@@ -53,7 +53,7 @@ void Huffman::buildBranch(string& path, char a_code) {//build a new branch accor
 			current = current->right;
 		}
 	}
-	current->id = a_code;//attach id to the leaf
+	current->id = a_code;
 	return;
 }
 
@@ -63,10 +63,10 @@ Huffman::Huffman(string in, string out) {
 	makeFQ();
 }
 
-void Huffman::createPQ() {
-	inFile.open(inFileName);
+void Huffman::makePQ() {
+	inFile.open(inFileName, ios::in);
 	inFile.get(id);
-	while (inFile.is_open() && !inFile.eof()) {
+	while (!inFile.eof()) {
 		freq_table[id]->freq++;
 		inFile.get(id);
 	}
@@ -78,7 +78,6 @@ void Huffman::createPQ() {
 }
 
 void Huffman::makeTree() {
-	createPQ();
 	priority_queue<huffman_node*, vector<huffman_node*>, Comparator> temp(pq);
 	while (temp.size() > 1) {
 		root = new huffman_node;
@@ -94,14 +93,13 @@ void Huffman::makeTree() {
 	return;
 }
 
-
 void Huffman::writeCompress() {
+	makePQ();
 	makeTree();
-	setCode(root, "");
+	makeCodes(root, "");
 	inFile.open(inFileName);
-	outFile.open(outFileName,ios::out | ios::binary);
+	outFile.open(outFileName, ios::out | ios::binary);
 	string in = "", s = "";
-
 	in += (char)pq.size();//the first byte saves the size of the priority queue
 	priority_queue<huffman_node*, vector<huffman_node*>, Comparator> temp(pq);
 	while (!temp.empty()) {//get all characters and their huffman codes for output
@@ -141,13 +139,13 @@ void Huffman::writeCompress() {
 	inFile.open(inFileName);
 	inFile.seekg(0, ios::end);
 	long unsigned int in_size = (long unsigned int)inFile.tellg();
-	cout << "Initial File Size: " << in_size << " bytes" << endl << endl;
+	cout << "Initial File Size: " << in_size << " bytes" << endl;
 	inFile.close();
-	
+
 	inFile.open(outFileName);
 	inFile.seekg(0, ios::end);
 	long unsigned int out_size = (long unsigned int)inFile.tellg();
-	cout << "Compressed File Size: " << out_size << " bytes" << endl << endl;
+	cout << "Compressed File Size: " << out_size << " bytes" << endl;
 	double ratio = double(out_size) / in_size;
 	cout << "Compression Ratio: " << ratio * 100 << "%" << endl;
 	inFile.close();
@@ -155,9 +153,8 @@ void Huffman::writeCompress() {
 }
 
 void Huffman::remakeTree() {
-	remakeTree();
-	inFile.open(inFileName,ios::binary);
-	unsigned char size;//unsigned char to get size of tree;
+	inFile.open(inFileName, ios::in | ios::binary);
+	unsigned char size;//unsigned char to get number of node of humman tree
 	inFile.read(reinterpret_cast<char*>(&size), 1);
 	root = new huffman_node;
 	for (int i = 0; i < size; i++) {
@@ -169,16 +166,17 @@ void Huffman::remakeTree() {
 		for (int i = 0; i < 16; i++)//obtain the oringinal 128-bit binary string
 			h_code_s += decimalToBinary(h_code_c[i]);
 		int j = 0;
-		while (h_code_s[j] == '0')//delete the added '000' to get the real huffman code
+		while (h_code_s[j] == '0')//delete the added '000бнбн1' to get the real huffman code
 			j++;
 		h_code_s = h_code_s.substr(j + 1);
-		buildBranch(h_code_s, a_code);
+		makeBranch(h_code_s, a_code);
 	}
 	inFile.close();
 	return;
 }
 
 void Huffman::writeDecompress() {
+	remakeTree();
 	inFile.open(inFileName, ios::in | ios::binary);
 	outFile.open(outFileName, ios::out);
 	unsigned char size;//get the size of huffman tree

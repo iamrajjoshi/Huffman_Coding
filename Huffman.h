@@ -1,5 +1,4 @@
 #pragma once
-
 #include <string>
 #include <queue>
 #include <vector>
@@ -8,9 +7,9 @@
 using namespace std;
 
 struct huffman_node {
-	char id;//character 
-	int freq;//frequency of the character
-	string code;//huffman code for the character
+	char id;
+	int freq;
+	string code;
 	huffman_node* left;
 	huffman_node* right;
 	huffman_node() {
@@ -36,13 +35,14 @@ private:
 	priority_queue<huffman_node*, vector<huffman_node*>, Comparator> pq;
 	
 	void makeFQ();
-	void createPQ();
-	void setCode(huffman_node*, string);//traverse the huffman tree and get huffman code for a character
-	int binaryToDecimal(string);//convert a 8-bit 0/1 string of binary code to a decimal integer 
-	string decimalToBinary(int);//convert a decimal integer to a 8-bit 0/1 string of binary code
-	void buildBranch(string&, char);//build the huffman tree according to information from file 
+	void makePQ();
 	void makeTree();
+	void makeCodes(huffman_node*, string);
+	int binaryToDecimal(string);
+	string decimalToBinary(int);
+	void makeBranch(string&, char);
 	void remakeTree();
+
 public:
 	Huffman(string, string);
 	void writeCompress();
