@@ -4,6 +4,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <map>
 using namespace std;
 
 struct huffman_node {
